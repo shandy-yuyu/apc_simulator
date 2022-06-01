@@ -2,9 +2,7 @@ FROM node:10
 
 USER root
 
-COPY ./src/ /app/src/
-COPY ./config/ /app/config/
-COPY ./package.json /app/
+COPY . /app
 
 WORKDIR /app/
 
