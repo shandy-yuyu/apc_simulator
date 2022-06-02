@@ -50,8 +50,8 @@ jobs:
           .
     - name: Test
       run: |-
+        docker images
         docker run "gcr.io/$IMAGE:$GITHUB_SHA" npm test
-        docker image ls
     # # Push the Docker image to Google Container Registry
     # - name: Publish
     #   run: |-
