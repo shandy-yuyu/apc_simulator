@@ -1,4 +1,4 @@
-const logger = require('../../utilities/logger')('GROUP_APC_SERVICE');
+const logger = require('../../utilities/logger')('APC_SERVICE');
 
 const natsMessageHandler = (message) => {
   if (!global.cache) {
