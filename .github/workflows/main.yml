@@ -41,6 +41,7 @@ jobs:
     # Build the Docker image
     - name: Build
       run: |-
+        eval $(minikube -p minikube docker-env)
         docker build \
           --tag "gcr.io/$IMAGE:$GITHUB_SHA" \
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
@@ -50,7 +51,7 @@ jobs:
       run: |-
         docker run "gcr.io/$IMAGE:$GITHUB_SHA" npm test
         docker image ls
-    # Push the Docker image to Google Container Registry
+    # # Push the Docker image to Google Container Registry
     # - name: Publish
     #   run: |-
     #     docker push "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
