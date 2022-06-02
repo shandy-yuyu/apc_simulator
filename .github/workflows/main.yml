@@ -10,7 +10,7 @@ env:
   GKE_CLUSTER: cluster-1    # TODO: update to cluster name
   GKE_ZONE: asia-east2-b   # TODO: update to cluster zone
   DEPLOYMENT_NAME: apc-app # TODO: update to deployment name
-  IMAGE: apc-stimulator
+  IMAGE: apc-simulator
 
 jobs:
   setup-build-publish-deploy:
@@ -49,10 +49,10 @@ jobs:
     - name: Test
       run: |-
         docker run "gcr.io/$IMAGE:$GITHUB_SHA" npm test
-#     # Push the Docker image to Google Container Registry
-#     - name: Publish
-#       run: |-
-#         docker push "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
+    # Push the Docker image to Google Container Registry
+    - name: Publish
+      run: |-
+        docker push "gcr.io/$IMAGE:$GITHUB_SHA"
 #     # Set up kustomize
 #     - name: Set up Kustomize
 #       run: |-
