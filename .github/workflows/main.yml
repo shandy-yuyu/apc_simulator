@@ -41,6 +41,7 @@ jobs:
     # Build the Docker image
     - name: Build
       run: |-
+        minikube start
         eval $(minikube -p minikube docker-env)
         docker build \
           --tag "gcr.io/$IMAGE:$GITHUB_SHA" \
