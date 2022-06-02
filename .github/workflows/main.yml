@@ -9,7 +9,7 @@ env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GKE_CLUSTER: cluster-1    # TODO: update to cluster name
   GKE_ZONE: asia-east2-b   # TODO: update to cluster zone
-  DEPLOYMENT_NAME: apc-app # TODO: update to deployment name
+  DEPLOYMENT_NAME: apc-simulator # TODO: update to deployment name
   IMAGE: apc-simulator
 
 jobs:
@@ -69,6 +69,7 @@ jobs:
         kubectl apply -f app/deployment.yml
         kubectl apply -f nats/deployment.yml
         kubectl apply -f nats/service.yml
+        kubectl rollout status deployment/$DEPLOYMENT_NAME
         kubectl get services -o wide
     - name: Get-logs
       run: |-
