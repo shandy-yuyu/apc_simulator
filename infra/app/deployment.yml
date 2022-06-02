@@ -15,7 +15,7 @@ spec:
       containers:
         - name: apc-simulator
           # image: lusifar/apc-simulator:v2
-          image: gcr.io/cloud-native-final-351108/apc-simulator:latest
+          image: gcr.io/PROJECT_ID/IMAGE:TAG
           ports:
             - containerPort: 3030
           env:
