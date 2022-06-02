@@ -6,6 +6,7 @@ COPY . /app
 
 WORKDIR /app/
 
+RUN npm-upgrade
 RUN npm install
 RUN npm test
 
