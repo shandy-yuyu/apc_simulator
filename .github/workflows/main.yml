@@ -63,7 +63,8 @@ jobs:
     - name: Deploy
       run: |-
         cd ./infra # 如果 mainfest 是放在某一個資料夾，這邊要替換成該資料夾名稱
-        kubectl apply -f app/deployment.yml
+        ./kustomize edit set image gcr.io/PROJECT_ID/IMAGE:TAG=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
+        ./kustomize build . | kubectl apply -f app/deployment.yml
         kubectl apply -f nats/deployment.yml
         kubectl apply -f nats/service.yml
         kubectl get services -o wide
