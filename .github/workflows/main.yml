@@ -48,8 +48,7 @@ jobs:
           .
     - name: test
       run: |-
-        docker run "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
-        npm test
+        docker run "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" npm test
 #     # Push the Docker image to Google Container Registry
 #     - name: Publish
 #       run: |-
