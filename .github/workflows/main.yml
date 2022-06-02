@@ -46,7 +46,7 @@ jobs:
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
           --build-arg GITHUB_REF="$GITHUB_REF" \
           .
-    - name: Test
+    - name: Testing
       run: |-
         docker run "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" npm test
 #     # Push the Docker image to Google Container Registry
