@@ -68,6 +68,6 @@ jobs:
         kubectl apply -f nats/service.yml
       # kubectl rollout status deployment/$DEPLOYMENT_NAME
         kubectl get services -o wide
-    - name: Get log
+    - name: Get-logs
       run: |-
         kubectl logs -l app=apc-simulator
