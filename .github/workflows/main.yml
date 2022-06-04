@@ -48,8 +48,7 @@ jobs:
           .
     - name: Test
       run: |-
-        docker images
-        docker run "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" npm test
+        docker run "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" npm test -- --coverage
     # # Push the Docker image to Google Container Registry
     - name: Publish
       run: |-
@@ -77,4 +76,3 @@ jobs:
     - name: Get-logs
       run: |-
         kubectl logs -l app=apc-simulator
-        
