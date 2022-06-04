@@ -41,6 +41,7 @@ jobs:
     # Get the GKE credentials so we can deploy to the cluster
     - run: |-
         gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
+        
     # Build the Docker image
     - name: Build
       run: |-
@@ -49,16 +50,22 @@ jobs:
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
           --build-arg GITHUB_REF="$GITHUB_REF" \
           .
+    - name: Test
+      run: |-
+        docker run "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" npm test -- --coverage
+        
     # Push the Docker image to Google Container Registry
     - name: Publish
       run: |-
         docker push "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
+        
     # Set up kustomize
     - name: Set up Kustomize
       run: |-
         cd ./k8s # 如果 mainfest 是放在某一個資料夾，這邊要替換成該資料夾名稱
         curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
         chmod u+x ./kustomize
+        
     # Deploy the Docker image to the GKE cluster
     - name: Deploy
       run: |-
