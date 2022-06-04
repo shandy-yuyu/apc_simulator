@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { defaultStrategy, sharonStrategy } = require('../../utilities/strategyUtil');
+const { defaultStrategy, sharonStrategy, ribeyesStrategy, stripStrategy } = require('../../utilities/strategyUtil');
 
 const logger = require('../../../utilities/logger')('APC_SERVICE');
 
@@ -26,6 +26,10 @@ router.post('/api/v1/process', async (req, res) => {
     let data = null;
     if (type === 'SHARON') {
       data = sharonStrategy(thickness, tFactor);
+    } else if (type === 'RIB_EYE') {
+      data = ribeyeStrategy(thickness, tFactor);
+    } else if (type === 'STRIP') {
+      data = stripStrategy(thickness, tFactor);
     } else {
       data = defaultStrategy(moisture, mFactor);
     }
