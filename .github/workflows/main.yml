@@ -1,18 +1,16 @@
-# This is a basic workflow to help you get started with Actions
-
-name: CI
+name: Build and Deploy to GKE
 
 on:
   push:
     branches:
     - main
-    
+
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
-  GKE_CLUSTER: cluster-1    # Add your cluster name here.
-  GKE_ZONE: asia-east2-b   # Add your cluster zone here.
-  DEPLOYMENT_NAME: gke-test # Add your deployment name here.
-  IMAGE: static-site
+  GKE_CLUSTER: cluster-1    # TODO: update to cluster name
+  GKE_ZONE: asia-east2-b   # TODO: update to cluster zone
+  DEPLOYMENT_NAME: apc-simulator # TODO: update to deployment name
+  IMAGE: apc-simulator
 
 jobs:
   setup-build-publish-deploy:
@@ -24,7 +22,6 @@ jobs:
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
-
     # Setup gcloud CLI
     - id: 'auth'
       uses: 'google-github-actions/auth@v0'
@@ -41,7 +38,6 @@ jobs:
     # Get the GKE credentials so we can deploy to the cluster
     - run: |-
         gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
-        
     # Build the Docker image
     - name: Build
       run: |-
@@ -53,24 +49,30 @@ jobs:
     - name: Test
       run: |-
         docker run "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" npm test -- --coverage
-        
-    # Push the Docker image to Google Container Registry
+    # # Push the Docker image to Google Container Registry
     - name: Publish
       run: |-
         docker push "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
-        
     # Set up kustomize
     - name: Set up Kustomize
       run: |-
-        cd ./k8s # 如果 mainfest 是放在某一個資料夾，這邊要替換成該資料夾名稱
+        cd ./infra/app # 如果 mainfest 是放在某一個資料夾，這邊要替換成該資料夾名稱
         curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
         chmod u+x ./kustomize
-        
     # Deploy the Docker image to the GKE cluster
-    - name: Deploy
+    - name: Deploy-nat
       run: |-
-        cd ./k8s # 如果 mainfest 是放在某一個資料夾，這邊要替換成該資料夾名稱
+        cd ./infra # 如果 mainfest 是放在某一個資料夾，這邊要替換成該資料夾名稱
+        kubectl apply -f nats/deployment.yml
+        kubectl apply -f nats/service.yml
+        kubectl rollout status deployment/nats-server
+        kubectl get services -o wide
+    - name: Deploy-apc
+      run: |-
+        cd ./infra/app # 如果 mainfest 是放在某一個資料夾，這邊要替換成該資料夾名稱
         ./kustomize edit set image gcr.io/PROJECT_ID/IMAGE:TAG=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
         ./kustomize build . | kubectl apply -f -
         kubectl rollout status deployment/$DEPLOYMENT_NAME
-        kubectl get services -o wide
+    - name: Get-logs
+      run: |-
+        kubectl logs -l app=apc-simulator
