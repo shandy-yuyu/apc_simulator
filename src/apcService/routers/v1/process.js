@@ -6,6 +6,8 @@ const logger = require('../../../utilities/logger')('APC_SERVICE');
 
 const router = express.Router();
 
+const db = require('../../../utilities/db');
+
 router.post('/api/v1/process', async (req, res) => {
   const { id, type, thickness, moisture } = req.body;
 
@@ -17,11 +19,12 @@ router.post('/api/v1/process', async (req, res) => {
   });
 
   try {
-    if (!global.cache) {
+    const factors = db.getCollection('factors');
+    if (!factors) {
       throw new Error('the global cache is not existed');
     }
-    const tFactor = global.cache.get('FACTOR_THICKNESS');
-    const mFactor = global.cache.get('FACTOR_MOISTURE');
+    const tFactor = factors.get('FACTOR_THICKNESS');
+    const mFactor = factors.get('FACTOR_MOISTURE');
 
     let data = null;
     if (type === 'SHARON') {
