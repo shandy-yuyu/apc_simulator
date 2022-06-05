@@ -11,6 +11,10 @@ const connect = () => {
   client.connect();
   db = client.db(dbConfig.dbName);
 
+  if (!db) {
+    logger.info('MongoDB connected failed!');
+    return;
+  }
   logger.info('MongoDB successfully connected!');
 
   for (const [key, value] of Object.entries(dbConfig.initValue)) {

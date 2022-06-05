@@ -52,6 +52,10 @@ const initGlobalNATSClient = async () => {
 
 const run = async () => {
   db.connect();
+  // if(!db.connect()) {
+  //   logger.info('DB connected failed!');
+  //   return;
+  // }
 
   // initialize the global resource
   await initGlobalNATSClient();

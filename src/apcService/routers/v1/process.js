@@ -19,9 +19,13 @@ router.post('/api/v1/process', async (req, res) => {
   });
 
   try {
+    if (db != null) {
+      logger.info('MongoDB not exist!');
+      return;
+    }
     const factors = db.getCollection('factors');
     if (!factors) {
-      throw new Error('the global cache is not existed');
+      throw new Error('the db factors is not existed');
     }
     const tFactor = factors.get('FACTOR_THICKNESS');
     const mFactor = factors.get('FACTOR_MOISTURE');
