@@ -16,7 +16,27 @@ const sharonStrategy = (thickness, tFactor) => {
   };
 };
 
+const ribeyesStrategy = (thickness, tFactor) => {
+  const temperature = (thickness * tFactor).toFixed(2);
+
+  return {
+    period: 30,
+    temperature,
+  };
+};
+
+const stripStrategy = (thickness, tFactor) => {
+  const temperature = (thickness * tFactor).toFixed(2);
+
+  return {
+    period: 50,
+    temperature,
+  };
+};
+
 module.exports = {
   defaultStrategy,
   sharonStrategy,
+  ribeyesStrategy,
+  stripStrategy
 };
