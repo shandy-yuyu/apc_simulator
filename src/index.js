@@ -5,12 +5,13 @@ const { nats } = require('config');
 
 const NodeCache = require('node-cache');
 
-const logger = require('./utilities/logger')('NEW_INDEX');
+const logger = require('./utilities/logger')('INDEX_V2');
 const NATSClient = require('./utilities/natsClient');
 
 const measureService = require('./measureService');
 const apcService = require('./apcService');
 const paramsService = require('./paramsService');
+const db = require('./utilities/db');
 
 let measureHandle = null;
 let paramsHandle = null;
@@ -42,17 +43,23 @@ const initGlobalNATSClient = async () => {
   await global.natsClient.addConsumer(nats.stream, `${nats.subject}.params`, `${nats.consumer}_params`);
 };
 
-const initGlobalCache = async () => {
-  global.cache = new NodeCache();
+// const initGlobalCache = async () => {
+//   global.cache = new NodeCache();
 
-  global.cache.set('FACTOR_THICKNESS', 0.5);
-  global.cache.set('FACTOR_MOISTURE', 0.5);
-};
+//   global.cache.set('FACTOR_THICKNESS', 0.5);
+//   global.cache.set('FACTOR_MOISTURE', 0.5);
+// };
 
 const run = async () => {
+  db.connect();
+  // if(!db.connect()) {
+  //   logger.info('DB connected failed!');
+  //   return;
+  // }
+
   // initialize the global resource
   await initGlobalNATSClient();
-  await initGlobalCache();
+  // await initGlobalCache();
 
   // run all services
   await apcService.run();
@@ -63,10 +70,7 @@ const run = async () => {
 run();
 
 process.on('SIGINT', async () => {
-  if (global.cache) {
-    await global.cache.close();
-    global.cache = null;
-  }
+  db.disconnect();
 
   if (global.natsClient) {
     await global.natsClient.disconnect();
