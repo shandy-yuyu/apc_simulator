@@ -5,6 +5,10 @@ describe('test', ()=>{
         jest.restoreAllMocks();
     })
     it('Call by 200', ()=>{
+        global.cache = {
+            set: jest.fn().mockReturnValueOnce(true),
+            get: jest.fn().mockReturnThis(0.5)
+        }
         const express = require('express');
         const mRouter = {post: jest.fn()};
         jest.spyOn(express, 'Router').mockImplementationOnce(() => mRouter);
@@ -27,6 +31,6 @@ describe('test', ()=>{
         });
         require('../../routers/v1/process');
         // i dont know why 500 not 200 XD
-        expect(mRes.status).toBeCalledWith(500);
+        expect(mRes.status).toBeCalledWith(200);
     })
 })
