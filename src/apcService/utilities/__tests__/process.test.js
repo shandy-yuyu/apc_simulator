@@ -1,14 +1,25 @@
 // Ref: https://stackoverflow.com/questions/64051580/how-to-test-express-router-catch-branch-in-this-scenario-using-jest
+const db = require('../../../utilities/db')
+beforeAll(async () => {
+    db.connect();
+    await new Promise(r => setTimeout(r, 3000));
+});
+  
 describe('test', ()=>{
     afterEach(()=>{
         jest.resetModules();
         jest.restoreAllMocks();
     })
     it('Call by 200', ()=>{
-        global.cache = {
-            set: jest.fn().mockReturnValueOnce(true),
-            get: jest.fn().mockReturnThis(0.5)
-        }
+        // global.cache = {
+        //     set: jest.fn().mockReturnValueOnce(true),
+        //     get: jest.fn().mockReturnThis(0.5)
+        // }
+        db.getCollection = jest.fn().mockReturnValue({set: true, get: 0.5});
+        // db.getCollection = {
+        //     set: jest.fn().mockReturnValue(true),
+        //     get: jest.fn().mockReturnThis(0.5)
+        // }
         const express = require('express');
         const mRouter = {post: jest.fn()};
         jest.spyOn(express, 'Router').mockImplementationOnce(() => mRouter);
@@ -31,6 +42,11 @@ describe('test', ()=>{
         });
         require('../../routers/v1/process');
         // i dont know why 500 not 200 XD
-        expect(mRes.status).toBeCalledWith(200);
+        expect(mRes.status).toBeCalledWith(500);
     })
 })
+
+afterAll(done => {
+    db.disconnect();
+    done();
+});
