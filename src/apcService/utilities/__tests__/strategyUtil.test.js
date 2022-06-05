@@ -1,4 +1,4 @@
-const { sharonStrategy, defaultStrategy } = require('../strategyUtil');
+const { sharonStrategy, ribeyesStrategy, stripStrategy, defaultStrategy } = require('../strategyUtil');
 
 describe('Module strategyUtil', () => {
   const fakeThickness = 2.0;
@@ -11,6 +11,24 @@ describe('Module strategyUtil', () => {
 
     expect(res).toStrictEqual({
       period: 20,
+      temperature: (fakeThickness * fakeTFactor).toFixed(2),
+    });
+  });
+
+  it('Method ribeyesStrategy', () => {
+    const res = ribeyesStrategy(fakeThickness, fakeTFactor);
+
+    expect(res).toStrictEqual({
+      period: 30,
+      temperature: (fakeThickness * fakeTFactor).toFixed(2),
+    });
+  });
+
+  it('Method stripStrategy', () => {
+    const res = stripStrategy(fakeThickness, fakeTFactor);
+
+    expect(res).toStrictEqual({
+      period: 50,
       temperature: (fakeThickness * fakeTFactor).toFixed(2),
     });
   });
