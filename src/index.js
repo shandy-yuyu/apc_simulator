@@ -5,7 +5,7 @@ const { nats } = require('config');
 
 const NodeCache = require('node-cache');
 
-const logger = require('./utilities/logger')('NEW_INDEX');
+const logger = require('./utilities/logger')('INDEX_V2');
 const NATSClient = require('./utilities/natsClient');
 
 const measureService = require('./measureService');
