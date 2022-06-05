@@ -35,8 +35,9 @@ describe('Module messageUtil', () => {
         factor: fakeFactor,
       })
     );
-  
+    // wont call the logger.js, which will call is factor.js
     expect(global.cache.set).toHaveBeenCalledWith(fakeType2, fakeFactor);
+    expect(global.cache.set).toHaveReturnedWith(true);
   });
 
   it('Method natsMessageHandler for failed', async () => {
@@ -52,8 +53,6 @@ describe('Module messageUtil', () => {
     );
     
     expect(global.cache.set).toBeCalledTimes(0);
-    // expect(global.cache.set.fakeType).toBe(fakeFactor);
-    // expect(global.cache).toBe(null);
     
   });
 
