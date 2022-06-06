@@ -5,10 +5,10 @@ const dbConfig = require('config').db;
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
 const connection = process.env.DB_SERVER || dbConfig.url;
-logger.info(`nats-server connection: ${connection}`);
+logger.info(`db-server connection: ${connection}`);
 
 // const client = new MongoClient(dbConfig.url);
-const client = new MongoClient(dbConfig.url, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+const client = new MongoClient(connection, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 let db = undefined;
 
 // const connect = () => {
@@ -29,11 +29,11 @@ const connect = async function () {
 
   if (!db) {
     logger.info('MongoDB connected failed!');
-    logger.info(`MongoDB failed connect to ${dbConfig.url}`);
+    logger.info(`MongoDB failed connect to ${connection}`);
     return;
   }
   else {
-    logger.info(`MongoDB successfully connect to ${dbConfig.url}`);
+    logger.info(`MongoDB successfully connect to ${connection}`);
 
     // exist: update value/ not exist: init
     for (const [key, value] of Object.entries(dbConfig.initValue)) {
