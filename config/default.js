@@ -21,9 +21,10 @@ module.exports = {
     },
   },
   db: {
-    // url: 'mongodb://localhost:27017/apc_simulator',
+    // url: 'mongodb://localhost:27017/',
+    // url: 'mongodb+srv://sandy:0705110490@cluster0.s6fz0.mongodb.net/?retryWrites=true&w=majority',
     url: $DB_SERVER,
-    dbName: 'apc',
+    dbName: 'apcDB',
     initValue: {
       FACTOR_THICKNESS: 0.5,
       FACTOR_MOISTURE: 0.5,
