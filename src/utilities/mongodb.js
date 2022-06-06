@@ -1,9 +1,12 @@
 const logger = require('./logger')('MONGODB');
 // const MongoClient = require('mongodb').MongoClient;
 const dbConfig = require('config').db;
-logger.info(`MongoDB try to connect to ${dbConfig.url}`);
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
+
+const connection = process.env.DB_SERVER || dbConfig.url;
+logger.info(`nats-server connection: ${connection}`);
+
 // const client = new MongoClient(dbConfig.url);
 const client = new MongoClient(dbConfig.url, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 let db = undefined;
