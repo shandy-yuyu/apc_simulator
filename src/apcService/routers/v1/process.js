@@ -6,7 +6,7 @@ const logger = require('../../../utilities/logger')('APC_SERVICE');
 
 const router = express.Router();
 
-const db = require('../../../utilities/db');
+const db = require('../../../utilities/mongodb');
 
 router.post('/api/v1/process', async (req, res) => {
   const { id, type, thickness, moisture } = req.body;
