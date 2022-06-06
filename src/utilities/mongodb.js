@@ -25,11 +25,11 @@ const connect = async function () {
 
   if (!db) {
     logger.info('MongoDB connected failed!');
-    logger.info('MongoDB url:', dbConfig.url);
+    logger.info(`MongoDB failed connect to ${dbConfig.url}`);
     return;
   }
   else {
-    logger.info('MongoDB successfully connect to: ', dbConfig.url);
+    logger.info(`MongoDB successfully connect to ${dbConfig.url}`);
 
     // exist: update value/ not exist: init
     for (const [key, value] of Object.entries(dbConfig.initValue)) {
