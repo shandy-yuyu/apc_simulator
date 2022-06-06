@@ -4,6 +4,7 @@ const dbConfig = require('config').db;
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
 // const client = new MongoClient(dbConfig.url);
+logger.info(`MongoDB try to connect to ${dbConfig.url}`);
 const client = new MongoClient(dbConfig.url, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 let db = undefined;
 
