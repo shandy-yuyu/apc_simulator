@@ -4,7 +4,7 @@ const dbConfig = require('config').db;
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
-const connection = process.env.DB_SERVER || dbConfig.url;
+const connection = dbConfig.url || process.env.DB_SERVER;
 logger.info(`db-server connection: ${connection}`);
 
 // const client = new MongoClient(dbConfig.url);
