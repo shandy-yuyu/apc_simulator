@@ -19,7 +19,7 @@ const connect = async function () {
   if (db) return db;
   // connect to MongoDB
   await client.connect();
-  await  listDatabases(client);
+  await listDatabases(client);
 
   db = client.db(dbConfig.dbName);
 
@@ -28,7 +28,7 @@ const connect = async function () {
     return;
   }
   else {
-    logger.info('MongoDB successfully connected!');
+    logger.info(`MongoDB successfully connect to ${dbConfig.url}`);
 
     // exist: update value/ not exist: init
     for (const [key, value] of Object.entries(dbConfig.initValue)) {
