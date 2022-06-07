@@ -1,23 +1,14 @@
 const logger = require('./logger')('MONGODB');
 // const MongoClient = require('mongodb').MongoClient;
 const dbConfig = require('config').db;
-
 const { MongoClient, ServerApiVersion } = require('mongodb');
-
 const connection = dbConfig.url || process.env.DB_SERVER;
 logger.info(`db-server connection: ${connection}`);
+const client = new MongoClient(connection, { useNewUrlParser: true,
+                                             useUnifiedTopology: true,
+                                             serverApi: ServerApiVersion.v1 });
 
-// const client = new MongoClient(dbConfig.url);
-const client = new MongoClient(connection, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 let db = undefined;
-
-// const connect = () => {
-// client.connect(err => {
-//   const collection = client.db("test").collection("devices");
-//   // perform actions on the collection object
-//   client.close();
-// });
-// }
 
 const connect = async function () {
   if (db) return db;
@@ -37,7 +28,7 @@ const connect = async function () {
 
     // exist: update value/ not exist: init
     for (const [key, value] of Object.entries(dbConfig.initValue)) {
-      logger.info(`init default value: ${key}=${value}`);
+      logger.info(`init value: ${key}=${value}`);
       getCollection('factors').updateOne(
         { name: key },
         { $set: { name: key, value: value } },
@@ -46,7 +37,6 @@ const connect = async function () {
     }
     return db;
   }
-  
 }
 
 async function listDatabases(client){

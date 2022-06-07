@@ -20,7 +20,7 @@ router.post('/api/v1/process', async (req, res) => {
 
   try {
     if (db != null) {
-      logger.info('MongoDB not exist!');
+      // logger.info('MongoDB not exist!');
       return;
     }
     const factors = db.getCollection('factors');
